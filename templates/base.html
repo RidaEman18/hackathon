@@ -22,16 +22,27 @@
   </nav>
 </header>
 <div class="access" role="toolbar" aria-label="Accessibility">
-  <button id="a-minus" aria-label="Smaller text">A−</button>
-  <button id="a-plus" aria-label="Bigger text">A+</button>
-  <button id="simple-toggle" aria-pressed="false">Simple words</button>
-  <button id="read-page">🔊 Read aloud</button>
+  <button id="a-minus" type="button" aria-label="Smaller text">A−</button>
+  <button id="a-plus" type="button" aria-label="Bigger text">A+</button>
+  <button id="simple-toggle" type="button" aria-pressed="false">Simple words</button>
+  <button id="read-page" type="button">🔊 Read aloud</button>
+  <label for="speech-rate">Speed</label>
+  <select id="speech-rate" aria-label="Reading speed">
+    <option value="0.75">Slow</option>
+    <option value="0.9" selected>Normal</option>
+    <option value="1.1">Fast</option>
+  </select>
+  <button id="speech-pause" type="button">⏸ Pause</button>
+  <button id="speech-resume" type="button">▶ Resume</button>
+  <button id="speech-stop" type="button">■ Stop</button>
+  <span id="speech-status" role="status" aria-live="polite"></span>
 </div>
 <main id="main">{% block content %}{% endblock %}</main>
 <footer class="foot">
   <p><strong>qadam.</strong> Take it one step at a time. Practice rooms are simulations. Nothing in them is real.</p>
 </footer>
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/voice.js') }}"></script>
 {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -53,3 +53,15 @@ Sirf admin role. Overview stats, saare users aur unka progress, Safety quiz ke s
 ## Structure
 
 `app.py` routes and API, `database.py` SQLite, `data/` content, `templates/` pages, `static/` CSS and JS.
+
+
+## Practice rooms (`/practice`)
+
+Three simulated rooms with a coach panel: **Bank**, **Form** and **Video call**. Each step expects one action. A wrong tap gets a kind message, "I'm stuck" shows a hint, and "Suno" reads the instruction aloud.
+
+- **Bank Sandbox:** fake banking app (demo balance Rs 25,000). The **Undo** button steps back, and the app reminds the user that real banks usually cannot reverse a sent payment, so check the name first.
+- **Video Call Rehearsal:** uses the browser's real `getUserMedia` camera/mic permission, shows a live self-preview, and really mutes/unmutes the mic. If there is no camera, the page is not secure, or the device has none, it falls back to pretending. A blocked permission shows how to allow it.
+- Finishing a room saves `practice` progress (`bank`, `form`, `video`), which feeds the confidence score.
+- A room can be opened directly with a link such as `/practice#bank`.
+
+Limitation: the bank and form rooms are fake interfaces. No real banking or real data is used.

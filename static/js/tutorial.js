@@ -10,6 +10,7 @@ function render() {
   $('#dots').innerHTML = T.steps.map((_, k) => `<span class="pd ${k < i ? 'done' : k === i ? 'now' : ''}"></span>`).join('');
   $('#back').disabled = i === 0;
   $('#next').textContent = last ? 'I finished this lesson' : 'Next ▶';
+  renderScreen(s);
 }
 
 $('#back').onclick = () => { if (i > 0) { i--; render(); } };
@@ -18,6 +19,6 @@ $('#next').onclick = async () => {
   await api('/api/progress', { kind: 'tutorial', key: T.slug, value: 1 });
   location.href = '/path';
 };
-$('#read').onclick = () => speak($('#text').textContent);
+$('#read').onclick = () => speak($('#text').textContent + ' ' + (T.steps[i].tip || ''));
 document.addEventListener('qsimple', render);
 render();

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Safety{% endblock %}
+{% block content %}
+<h1>Safety</h1>
+<section class="warn">
+  <h2>Four red flags</h2>
+  <ul>
+    <li><strong>Hurry.</strong> "Do it in 2 hours or lose your account."</li>
+    <li><strong>Secrets.</strong> Asks for your PIN, password or OTP.</li>
+    <li><strong>Links.</strong> A strange link you did not expect.</li>
+    <li><strong>Money.</strong> A prize, or a "relative" needing cash now.</li>
+  </ul>
+</section>
+<section class="block">
+  <h2>Scam quiz</h2>
+  <div id="quiz"></div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>window.QUIZ = {{ quiz|tojson }};</script>
+<script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+{% endblock %}

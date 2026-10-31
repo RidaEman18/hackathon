@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Helper{% endblock %}
+{% block content %}
+<h1>qadam. Helper</h1>
+<p class="muted">Answers come from our built-in guide, not a live AI.</p>
+<div id="suggest" class="suggest"></div>
+<div class="ask">
+  <input id="q" type="text" placeholder="Type your question here" aria-label="Your question">
+  <button class="btn" id="go">Ask</button>
+</div>
+<div id="answer" class="answer" hidden aria-live="polite">
+  <h3>Short answer</h3><p id="a-short"></p>
+  <h3>In simple words</h3><p id="a-simple"></p>
+  <h3>What to do next</h3><p id="a-next"></p>
+  <button class="btn alt" id="a-read">🔊 Read aloud</button>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/assistant.js') }}"></script>{% endblock %}

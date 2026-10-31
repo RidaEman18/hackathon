@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Practice{% endblock %}
+{% block content %}
+<div class="ribbon">PRACTICE ROOM. Nothing here is real.</div>
+<h1>Practice</h1>
+<div class="tabs" role="tablist">
+  <button data-room="bank" class="tab">🏦 Bank</button>
+  <button data-room="form" class="tab">📝 Form</button>
+  <button data-room="video" class="tab">📹 Video call</button>
+</div>
+<div class="room" id="room" hidden>
+  <div class="device" aria-label="Practice device">
+    <h2 id="room-title"></h2>
+    <div id="ui" class="ui"></div>
+    <p id="out" class="out" aria-live="polite"></p>
+  </div>
+  <aside class="coach">
+    <h2>What to do now</h2>
+    <p id="coach-text" class="coach-text"></p>
+    <p class="muted" id="count"></p>
+    <button class="btn alt" id="stuck">I'm stuck</button>
+    <p id="hint" class="hint" hidden></p>
+    <button class="btn" id="again" hidden>Try again</button>
+  </aside>
+</div>
+<p id="pick" class="lead">Choose a room to begin.</p>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/practice.js') }}"></script>{% endblock %}

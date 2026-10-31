@@ -9,17 +9,29 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-{% set p = request.path %}
+{% set cur = request.path %}
 <header class="top">
   <a class="logo" href="/">qadam<span class="stop">.</span></a>
   <nav class="nav" aria-label="Main">
-    <a href="/" class="{{ 'on' if p == '/' }}"><i>🏠</i>Home</a>
-    <a href="/path" class="{{ 'on' if p == '/path' }}"><i>🪨</i>My Path</a>
-    <a href="/learn" class="{{ 'on' if p.startswith('/learn') }}"><i>📖</i>Learn</a>
-    <a href="/practice" class="{{ 'on' if p == '/practice' }}"><i>🧪</i>Practice</a>
-    <a href="/safety" class="{{ 'on' if p == '/safety' }}"><i>🛡️</i>Safety</a>
-    <a href="/assistant" class="helper {{ 'on' if p == '/assistant' }}"><i>💬</i>Helper</a>
+    <a href="/" class="{{ 'on' if cur == '/' }}"><i>🏠</i>Home</a>
+    {% if user %}<a href="/path" class="{{ 'on' if cur == '/path' }}"><i>📊</i>Dashboard</a>{% endif %}
+    <a href="/learn" class="{{ 'on' if cur.startswith('/learn') }}"><i>📖</i>Learn</a>
+    <a href="/practice" class="{{ 'on' if cur == '/practice' }}"><i>🧪</i>Practice</a>
+    <a href="/safety" class="{{ 'on' if cur == '/safety' }}"><i>🛡️</i>Safety</a>
+    <a href="/dojo" class="{{ 'on' if cur == '/dojo' }}"><i>🥋</i>Dojo</a>
+    <a href="/assistant" class="helper {{ 'on' if cur == '/assistant' }}"><i>💬</i>Helper</a>
+    {% if not user %}
+    <a href="/login" class="{{ 'on' if cur == '/login' }}"><i>🔑</i>Login</a>
+    <a href="/register" class="reg {{ 'on' if cur == '/register' }}"><i>✍️</i>Register</a>
+    {% endif %}
   </nav>
+  {% if user %}
+  <div class="who">
+      <span>👤 {{ user.name or user.email }}</span>
+      {% if user.role == 'admin' %}<a href="/admin">Admin</a>{% endif %}
+      <form method="post" action="/logout"><input type="hidden" name="csrf" value="{{ csrf_token() }}"><button class="linkbtn" type="submit">Logout</button></form>
+  </div>
+  {% endif %}
 </header>
 <div class="access" role="toolbar" aria-label="Accessibility">
   <button id="a-minus" type="button" aria-label="Smaller text">A−</button>

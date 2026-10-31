@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Admin{% endblock %}
+{% block content %}
+<h1>Admin</h1>
+<nav class="subnav" aria-label="Admin">
+  <a href="/admin" class="on">Overview</a>
+  <a href="/admin/quiz">Safety quiz</a>
+  <a href="/admin/dojo">Dojo messages</a>
+  <form method="post" action="/logout"><input type="hidden" name="csrf" value="{{ csrf_token() }}"><button class="linkbtn" type="submit">Logout</button></form>
+</nav>
+{% if default_pw %}<p class="fb">Default admin password <code>admin123</code> chal raha hai. <code>ADMIN_PASSWORD</code> set karein.</p>{% endif %}
+
+<section class="stats">
+  <div class="stat"><span class="n">{{ users|length }}</span><span class="l">Accounts</span></div>
+  <div class="stat"><span class="n">{{ s.lessons }}</span><span class="l">Lessons completed</span></div>
+  <div class="stat"><span class="n">{{ s.practice }}</span><span class="l">Practice rooms completed</span></div>
+  <div class="stat"><span class="n">{{ s.dojo }}</span><span class="l">Dojo checks</span></div>
+  <div class="stat"><span class="n">{{ s.quiz_avg if s.quiz_avg is not none else '–' }}{% if s.quiz_avg is not none %}<small>%</small>{% endif %}</span><span class="l">Average best quiz score</span></div>
+</section>
+
+<section class="block two">
+  <div><h2>Safety quiz</h2><p>{{ n_quiz }} sawal. <a href="/admin/quiz">Sawal add ya delete karein</a></p></div>
+  <div><h2>Scam Dojo</h2><p>{{ n_dojo }} aap ke apne messages. Gemini: <strong>{{ 'on' if gemini else 'off (fallback messages)' }}</strong>. <a href="/admin/dojo">Messages add karein</a></p></div>
+</section>
+
+<section class="block">
+  <h2>Users</h2>
+  <div class="tablewrap"><table class="tbl">
+    <thead><tr><th>Naam</th><th>Email</th><th>Role</th><th>Score</th><th>Lessons</th><th>Practice</th><th>Quiz</th><th>Dojo</th><th>Joined</th></tr></thead>
+    <tbody>
+    {% for u in users %}<tr><td>{{ u.name }}</td><td>{{ u.email }}</td><td>{{ u.role }}</td><td>{{ u.score }}</td><td>{{ u.lessons }}</td><td>{{ u.practice }}</td><td>{{ u.quiz }}%</td><td>{{ u.dojo }}</td><td>{{ u.created[:10] if u.created else '' }}</td></tr>{% endfor %}
+    </tbody>
+  </table></div>
+</section>
+{% endblock %}

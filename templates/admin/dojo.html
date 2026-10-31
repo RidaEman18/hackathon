@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Admin: Dojo messages{% endblock %}
+{% block content %}
+<h1>Admin: Scam Dojo messages</h1>
+<nav class="subnav" aria-label="Admin">
+  <a href="/admin">Overview</a>
+  <a href="/admin/quiz">Safety quiz</a>
+  <a href="/admin/dojo" class="on">Dojo messages</a>
+</nav>
+<p class="muted">Yeh messages Dojo ke fallback pool mein jaate hain (jab Gemini na ho ya ek baar ke liye na chale).</p>
+
+<section class="block">
+  <h2>Naya message add karein</h2>
+  {% if error %}<p class="fb" role="alert">{{ error }}</p>{% endif %}
+  {% set f = request.form %}
+  <form method="post" class="form">
+    <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+    <label for="channel">Channel</label>
+    <select id="channel" name="channel">
+      <option {{ 'selected' if f.get('channel') == 'SMS' }}>SMS</option>
+      <option {{ 'selected' if f.get('channel') == 'WhatsApp' }}>WhatsApp</option>
+    </select>
+    <label for="sender">Bhejne wala (naam ya number)</label>
+    <input id="sender" name="sender" maxlength="40" required value="{{ f.get('sender', '') }}">
+    <label for="text">Message ka text</label>
+    <textarea id="text" name="text" rows="3" maxlength="500" required>{{ f.get('text', '') }}</textarea>
+    <label for="is_scam">Yeh message</label>
+    <select id="is_scam" name="is_scam">
+      <option value="1" {{ 'selected' if f.get('is_scam') != '0' }}>SCAM hai</option>
+      <option value="0" {{ 'selected' if f.get('is_scam') == '0' }}>Asli hai</option>
+    </select>
+    <label for="headline">Ek line ki wajah</label>
+    <input id="headline" name="headline" required value="{{ f.get('headline', '') }}">
+    <label for="highlights">Highlights, har line mein: <code>lafz | red ya green | wajah</code></label>
+    <textarea id="highlights" name="highlights" rows="4" required placeholder="apna PIN likhein | red | PIN koi company nahi maangti">{{ f.get('highlights', '') }}</textarea>
+    <p class="muted">Lafz message mein hu-ba-hu hona chahiye. Scam mein kam az kam ek red, asli mein sirf green.</p>
+    <label for="seedhi_baat">Seedhi baat</label>
+    <input id="seedhi_baat" name="seedhi_baat" required value="{{ f.get('seedhi_baat', '') }}">
+    <label for="kya_karein">Kya karein</label>
+    <input id="kya_karein" name="kya_karein" required value="{{ f.get('kya_karein', '') }}">
+    <button class="btn" type="submit">Message add karein</button>
+  </form>
+</section>
+
+<section class="block">
+  <h2>Aap ke messages ({{ custom|length }})</h2>
+  {% if not custom %}<p class="muted">Abhi koi nahi.</p>{% endif %}
+  <ul class="rows">
+    {% for m in custom %}
+    <li>
+      <div><small>{{ m.channel }} · {{ m.sender }} · <strong>{{ 'SCAM' if m.is_scam else 'Asli' }}</strong></small>
+        <p>{{ m.text }}</p><p class="muted">{{ m.headline }}</p></div>
+      <form method="post" onsubmit="return confirm('Yeh message delete karein?')">
+        <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+        <button class="btn alt" name="delete" value="{{ m.db_id }}">Delete</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

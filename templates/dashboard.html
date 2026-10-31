@@ -1,33 +1,64 @@
 {% extends "base.html" %}
-{% block title %}My Path{% endblock %}
+{% block title %}Dashboard{% endblock %}
 {% block content %}
-<h1>My Path</h1>
+<h1>My Dashboard</h1>
+
+<section class="stats" aria-label="Your progress">
+  <div class="stat">
+    <span class="n">{{ p.tutorials|length }}<small>/{{ total }}</small></span>
+    <span class="l">Lessons done</span>
+    <div class="meter"><div style="width:{{ (p.tutorials|length / total * 100)|round|int }}%"></div></div>
+  </div>
+  <div class="stat">
+    <span class="n">{{ p.practice|length }}<small>/3</small></span>
+    <span class="l">Practice rooms</span>
+    <div class="meter"><div style="width:{{ ([p.practice|length, 3]|min / 3 * 100)|round|int }}%"></div></div>
+  </div>
+  <div class="stat">
+    <span class="n">{{ p.quiz }}<small>%</small></span>
+    <span class="l">Best safety quiz score</span>
+    <div class="meter"><div style="width:{{ p.quiz }}%"></div></div>
+  </div>
+  <div class="stat">
+    <span class="n">{{ p.dojo }}</span>
+    <span class="l">Scam Dojo messages checked</span>
+    <a href="/dojo">Dojo kholein</a>
+  </div>
+</section>
+
 <div class="path-grid">
-  <ol class="trail">
-    {% for t in tutorials %}
-      {% set st = 'done' if t.slug in p.tutorials else ('now' if nxt and nxt.slug == t.slug else 'next') %}
-      <li class="{{ st }}"><a href="/learn/{{ t.slug }}"><span class="stone">{{ '✓' if st == 'done' else loop.index }}</span>{{ t.title }}<small>{{ 'Done' if st == 'done' else ('Your next step' if st == 'now' else 'Coming up') }}</small></a></li>
-    {% endfor %}
-  </ol>
+  <div>
+    <h2>Your lessons</h2>
+    <ol class="trail">
+      {% for t in tutorials %}
+        {% set st = 'done' if t.slug in p.tutorials else ('now' if nxt and nxt.slug == t.slug else 'next') %}
+        <li class="{{ st }}"><a href="/learn/{{ t.slug }}"><span class="stone">{{ '✓' if st == 'done' else loop.index }}</span>{{ t.title }}<small>{{ 'Done' if st == 'done' else ('Your next step' if st == 'now' else 'Coming up') }}</small></a></li>
+      {% endfor %}
+    </ol>
+  </div>
   <aside>
-    <div class="panel">
-      <h2>Your next step</h2>
-      {% if nxt %}<p>{{ nxt.title }}</p><a class="btn" href="/learn/{{ nxt.slug }}">Start lesson</a>
-      {% else %}<p>All lessons done. Try a practice room or the scam quiz.</p><a class="btn" href="/practice">Go to Practice</a>{% endif %}
-    </div>
     <div class="panel">
       <h2>Confidence score</h2>
       <p class="score">{{ p.score }}<span>/100</span></p>
       <div class="meter" role="progressbar" aria-valuenow="{{ p.score }}" aria-valuemin="0" aria-valuemax="100"><div style="width:{{ p.score }}%"></div></div>
       <p><strong>{{ p.level }}</strong></p>
       <p class="muted">Just starting, Getting comfortable, Confident, Digital Pro</p>
+      <p class="muted">Score = lessons 40 + practice rooms 30 + safety quiz 30.</p>
+    </div>
+    <div class="panel">
+      <h2>Your next step</h2>
+      {% if nxt %}<p>{{ nxt.title }}</p><a class="btn" href="/learn/{{ nxt.slug }}">Start lesson</a>
+      {% elif p.practice|length < 3 %}<p>All lessons done. Try a practice room.</p><a class="btn" href="/practice">Go to Practice</a>
+      {% elif p.quiz < 80 %}<p>Take the safety quiz and aim for 80%.</p><a class="btn" href="/safety">Safety quiz</a>
+      {% else %}<p>Great work! Keep sharp in the Scam Dojo.</p><a class="btn" href="/dojo">Scam Dojo</a>{% endif %}
     </div>
   </aside>
 </div>
+
 <section class="block">
   <h2>Badges</h2>
   {% if badges %}<ul class="badges">{% for b in badges %}<li>{{ b }}</li>{% endfor %}</ul>
   {% else %}<p>Finish a lesson to earn your first badge.</p>{% endif %}
-  <p><a class="btn alt" href="/practice">Quick practice</a></p>
+  <p class="muted">Dojo regular: check 10 messages in the Scam Dojo.</p>
 </section>
 {% endblock %}

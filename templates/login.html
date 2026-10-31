@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<h1>Login</h1>
+{% if default_pw %}<p class="fb">Testing: admin ka email <code>admin@example.com</code> aur password <code>admin123</code> hai. Asli istemal se pehle <code>ADMIN_EMAIL</code> aur <code>ADMIN_PASSWORD</code> set karein.</p>{% endif %}
+{% if error %}<p class="fb" role="alert">{{ error }}</p>{% endif %}
+<form method="post" class="form narrow" novalidate>
+  <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+  {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+  <label for="email">Email</label>
+  <input id="email" type="email" name="email" placeholder="name@example.com" autocomplete="email" inputmode="email" maxlength="254" required autofocus value="{{ request.form.get('email', '') }}">
+  <label for="pw">Password</label>
+  <input id="pw" type="password" name="password" autocomplete="current-password" required>
+  <button class="btn" type="submit">Login</button>
+</form>
+<p>Naye hain? <a href="/register">Account banayein</a></p>
+{% endblock %}

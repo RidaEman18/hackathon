@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Admin: Safety quiz{% endblock %}
+{% block content %}
+<h1>Admin: Safety quiz</h1>
+<nav class="subnav" aria-label="Admin">
+  <a href="/admin">Overview</a>
+  <a href="/admin/quiz" class="on">Safety quiz</a>
+  <a href="/admin/dojo">Dojo messages</a>
+</nav>
+
+<section class="block">
+  <h2>Naya sawal add karein</h2>
+  {% if error %}<p class="fb" role="alert">{{ error }}</p>{% endif %}
+  <form method="post" class="form">
+    <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+    <label for="sender">Kahan se aaya (jaise: SMS from 'Bank')</label>
+    <input id="sender" name="sender" maxlength="80" required value="{{ request.form.get('sender', '') }}">
+    <label for="msg">Message</label>
+    <textarea id="msg" name="msg" rows="3" maxlength="500" required>{{ request.form.get('msg', '') }}</textarea>
+    <label for="answer">Sahi jawab</label>
+    <select id="answer" name="answer" required>
+      <option value="0" {{ 'selected' if request.form.get('answer') == '0' }}>Scam</option>
+      <option value="1" {{ 'selected' if request.form.get('answer') == '1' }}>Real</option>
+      <option value="2" {{ 'selected' if request.form.get('answer') == '2' }}>Not sure, I'll call the bank</option>
+    </select>
+    <label for="why">Wajah (jawab ke baad dikhegi)</label>
+    <input id="why" name="why" maxlength="300" required value="{{ request.form.get('why', '') }}">
+    <button class="btn" type="submit">Sawal add karein</button>
+  </form>
+</section>
+
+<section class="block">
+  <h2>Aap ke sawal ({{ custom|length }})</h2>
+  {% if not custom %}<p class="muted">Abhi koi nahi. Upar se add karein. Yeh Safety page ke quiz mein built-in sawalon ke baad aate hain.</p>{% endif %}
+  <ul class="rows">
+    {% for q in custom %}
+    <li>
+      <div><small>{{ q['from'] }}</small><p>{{ q.msg }}</p>
+        <p class="muted">Jawab: <strong>{{ ['Scam', 'Real', 'Not sure'][q.answer] }}</strong>. {{ q.why }}</p></div>
+      <form method="post" onsubmit="return confirm('Yeh sawal delete karein?')">
+        <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+        <button class="btn alt" name="delete" value="{{ q.id }}">Delete</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="block">
+  <h2>Built-in sawal ({{ builtin|length }})</h2>
+  <ul class="rows">
+    {% for q in builtin %}<li><div><small>{{ q['from'] }}</small><p>{{ q.msg }}</p>
+      <p class="muted">Jawab: <strong>{{ ['Scam', 'Real', 'Not sure'][q.answer] }}</strong>. {{ q.why }}</p></div></li>{% endfor %}
+  </ul>
+</section>
+{% endblock %}

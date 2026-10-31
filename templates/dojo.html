@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Scam Dojo{% endblock %}
+{% block content %}
+<h1>🥋 Scam Dojo</h1>
+<p class="lead">Message parhein aur dekhein: kya yeh asli hai ya scam? Jawab abhi chhupa hai.</p>
+
+<div id="dojo">
+  <div class="phone-bubble" id="msg-box" aria-live="polite">
+    <small id="msg-meta">Message aa raha hai…</small>
+    <span id="msg-text"></span>
+  </div>
+
+  <div class="dojo-actions">
+    <button class="btn" id="check" disabled>Real or Scam?</button>
+    <button class="btn alt" id="next" hidden>Agla message</button>
+  </div>
+  <p id="dojo-err" class="muted" role="alert" hidden></p>
+
+  <section id="result" class="result" hidden aria-live="polite">
+    <h2 id="verdict"></h2>
+    <p id="headline" class="muted"></p>
+    <h3>Shak wale aur achay lafz</h3>
+    <ul id="reasons" class="reasons"></ul>
+    <div class="say">
+      <h3>Seedhi baat</h3><p id="seedhi"></p>
+      <h3>Kya karein</h3><p id="kya"></p>
+    </div>
+    <button class="btn alt" id="listen">🔊 Suno</button>
+    <p class="muted" id="source"></p>
+  </section>
+
+  <p class="muted" id="tally"></p>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/dojo.js') }}"></script>{% endblock %}

@@ -216,3 +216,5 @@ code{background:var(--sage);padding:.05em .4em;border-radius:6px;font-size:.9em}
   .nav-row .btn{flex:1;padding-inline:1rem}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}.phone{transform:none}}
+[hidden]{display:none !important}
+

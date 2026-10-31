@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Form Whisperer{% endblock %}
+{% block content %}
+<style>
+.fw-box{display:flex;gap:.6rem;flex-wrap:wrap}
+.fw-box input,.fw-box textarea{flex:1;min-width:220px;font:inherit;min-height:56px;padding:.6rem 1rem;border:var(--bd);border-radius:var(--r-sm);background:#fff}
+.fw-box input:focus,.fw-box textarea:focus{border-color:var(--teal);outline:none;box-shadow:0 0 0 4px rgba(15,92,90,.18)}
+.fw-card{margin-top:1.2rem;border:var(--bd);border-radius:var(--r);padding:.4rem 1.3rem 1.3rem;background:var(--card);box-shadow:var(--lift)}
+.fw-lbl{margin:.8rem 0 .1rem;font-weight:700;color:var(--terra)}
+.fw-en{font-size:1.2rem;font-weight:700;margin:0}
+.fw-ur{font-size:1.15rem;margin:0}
+.fw-note{background:var(--sage);border-left:6px solid var(--saffron);padding:.5rem .9rem;border-radius:var(--r-sm)}
+.fw-row{display:flex;flex-wrap:wrap;gap:.6rem;margin:.9rem 0}
+.fw-fb{margin-top:.8rem;padding:.7rem 1rem;border-radius:var(--r-sm);background:var(--sage);border-left:6px solid var(--saffron)}
+.fw-fb.ok{background:#e4f2e4;border-left-color:var(--forest)}
+.fw-fb p{margin:.2rem 0}
+.fw-safe{background:#fff;border:var(--bd);border-radius:var(--r-sm);padding:.6rem 1rem;margin:1rem 0}
+.fw-found{display:flex;flex-wrap:wrap;gap:.5rem;margin:.8rem 0}
+.fw-found button{font:inherit;font-weight:700;min-height:48px;padding:0 1rem;border:2px solid var(--teal);border-radius:99px;background:var(--card);color:var(--teal);cursor:pointer}
+.fw-found button:hover{background:var(--teal);color:#fff}
+details.fw-scan{margin:1rem 0;border:var(--bd);border-radius:var(--r-sm);padding:.6rem 1rem;background:var(--card)}
+details.fw-scan summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}
+.fw-steps{display:flex;gap:.6rem;flex-wrap:wrap;margin:.8rem 0}
+</style>
+<div class="ribbon">PRACTICE ROOM. Nothing here is real.</div>
+<h1>Form Whisperer</h1>
+<p class="lead">Type any confusing word from a form. Qadam explains it in simple English and Roman Urdu, then you practise filling it in.</p>
+<p class="fw-safe">🔒 Use <strong>made-up example details</strong> here, not your real CNIC or phone number. Nothing you type is saved.</p>
+
+<div class="tabs" role="tablist">
+  <button type="button" class="tab on" id="fw-tab-explain" role="tab" aria-selected="true">🔍 Explain a field</button>
+  <button type="button" class="tab" id="fw-tab-guide" role="tab" aria-selected="false">🧭 Fill a whole form, step by step</button>
+</div>
+
+<!-- Panel 1: explain one field -->
+<section id="fw-explain">
+  <div class="fw-box">
+    <input id="fw-q" type="text" maxlength="300" placeholder="e.g. Domicile, Date of birth, Next of kin" aria-label="Form field name">
+    <button class="btn" id="fw-go" type="button">Explain</button>
+  </div>
+  <div class="suggest" id="fw-sug"></div>
+  <details class="fw-scan">
+    <summary>Have the whole form? Paste its field names</summary>
+    <p class="muted">One per line. I will find the ones I know and put them in order.</p>
+    <div class="fw-box"><textarea id="fw-paste" rows="4" aria-label="Pasted field names" placeholder="Name&#10;Father name&#10;CNIC&#10;Date of birth&#10;Address"></textarea></div>
+    <div class="fw-row"><button class="btn alt" id="fw-scan" type="button">Find fields</button></div>
+    <p class="muted" id="fw-scan-out" aria-live="polite"></p>
+    <div class="fw-found" id="fw-found"></div>
+    <button class="btn" id="fw-guide-found" type="button" hidden>Guide me through these fields</button>
+  </details>
+  <div id="fw-res" aria-live="polite"></div>
+</section>
+
+<!-- Panel 2: guided form -->
+<section id="fw-guide" hidden>
+  <p class="lead">Choose a form. I will take you through it one field at a time.</p>
+  <div class="fw-steps" id="fw-presets"></div>
+  <div id="fw-run" hidden>
+    <p class="muted" id="fw-count" aria-live="polite"></p>
+    <div class="meter" aria-hidden="true"><div id="fw-bar" style="height:100%;width:0;background:var(--teal);transition:width .4s"></div></div>
+    <div id="fw-step"></div>
+    <div class="fw-row">
+      <button class="btn alt" id="fw-back" type="button">◀ Back</button>
+      <button class="btn alt" id="fw-stuck" type="button">I'm stuck</button>
+      <button class="btn" id="fw-next" type="button" disabled>Next ▶</button>
+    </div>
+  </div>
+  <div id="fw-done" hidden class="fw-card">
+    <h2>🎉 Form complete!</h2>
+    <p class="fw-en" id="fw-done-text"></p>
+    <p class="fw-ur">Shabash! Aap ne poora form practice kar liya.</p>
+    <div class="fw-row"><a class="btn" href="/path">See my progress</a><button class="btn alt" id="fw-again" type="button">Try another form</button></div>
+  </div>
+</section>
+
+<template id="fw-card-tpl">
+  <div class="fw-card">
+    <h2 class="fw-name"></h2>
+    <p class="fw-note" hidden></p>
+    <p class="fw-lbl">In simple English</p>
+    <p class="fw-en"></p><p class="muted fw-tip-en"></p>
+    <p class="fw-lbl">Roman Urdu</p>
+    <p class="fw-ur"></p><p class="muted fw-tip-ur"></p>
+    <div class="fw-row">
+      <button type="button" class="btn alt fw-say-en">🔊 Listen in English</button>
+      <button type="button" class="btn alt fw-say-ur">🔊 Suno (Urdu)</button>
+    </div>
+    <div class="fw-practice">
+      <h3>Now practise</h3>
+      <p>Write it like this: <strong class="fw-ex"></strong></p>
+      <div class="fw-box">
+        <input class="fw-fill" type="text" maxlength="300" autocomplete="off" aria-label="Practice answer">
+        <button type="button" class="btn fw-check">Check</button>
+      </div>
+      <div class="fw-fb" role="status" aria-live="polite" hidden></div>
+    </div>
+  </div>
+</template>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/form_whisperer.js') }}"></script>{% endblock %}

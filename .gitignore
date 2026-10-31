@@ -1,0 +1,17 @@
+# Virtual environment (can be recreated anytime)
+venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Local database (each computer creates its own)
+database.db
+
+# Editor and system files
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Secret settings (we'll never commit these)
+.env

@@ -114,10 +114,8 @@ def home():
     return render_template("index.html", tutorials=TUTORIALS)
 
 
-@app.route("/path")
-def dashboard():
-    p = progress()
-    nxt = next((t for t in TUTORIALS if t["slug"] not in p["tutorials"]), None)
+def badge_list(p):
+    """Badges earned so far (used by the dashboard and the certificate)."""
     badges = []
     if p["tutorials"]:
         badges.append("First step taken")
@@ -129,8 +127,30 @@ def dashboard():
         badges.append("Scam spotter")
     if p["dojo"] >= 10:
         badges.append("Dojo regular")
+    return badges
+
+
+@app.route("/path")
+def dashboard():
+    p = progress()
+    nxt = next((t for t in TUTORIALS if t["slug"] not in p["tutorials"]), None)
+    badges = badge_list(p)
     return render_template("dashboard.html", tutorials=TUTORIALS, p=p, nxt=nxt,
                            badges=badges, total=len(TUTORIALS))
+
+
+@app.route("/certificate")
+def certificate():
+    """Printable Digital Confidence Certificate (login required by before_request)."""
+    import hashlib
+    from datetime import date
+    p = progress()
+    unlocked = bool(p["tutorials"] or p["practice"])
+    who = (g.user["name"] or g.user["email"]) if g.user else "Learner"
+    cert_no = "QDM-" + hashlib.sha1(current_uid().encode()).hexdigest()[:8].upper()
+    return render_template("certificate.html", p=p, total=len(TUTORIALS), badges=badge_list(p),
+                           unlocked=unlocked, who=who, cert_no=cert_no,
+                           today=date.today().strftime("%d %B %Y"))
 
 
 @app.route("/dashboard")

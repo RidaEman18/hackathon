@@ -2,7 +2,6 @@
 {% block title %}Login{% endblock %}
 {% block content %}
 <h1>Login</h1>
-{% if default_pw %}<p class="fb">Testing: admin ka email <code>admin@example.com</code> aur password <code>admin123</code> hai. Asli istemal se pehle <code>ADMIN_EMAIL</code> aur <code>ADMIN_PASSWORD</code> set karein.</p>{% endif %}
 {% if error %}<p class="fb" role="alert">{{ error }}</p>{% endif %}
 <form method="post" class="form narrow" novalidate>
   <input type="hidden" name="csrf" value="{{ csrf_token() }}">

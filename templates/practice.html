@@ -1,6 +1,30 @@
 {% extends "base.html" %}
 {% block title %}Practice{% endblock %}
 {% block content %}
+<style>
+.bk{display:flex;flex-direction:column;gap:.8rem}
+.bk-head{display:flex;justify-content:space-between;align-items:center;gap:.5rem;background:var(--teal);color:#fff;padding:.7rem 1rem;border-radius:12px;font-size:.9rem}
+.bk-head strong{font-size:1.1rem}
+.bk-card{background:#fff;border:var(--bd);border-radius:12px;padding:.9rem 1rem}
+.bk-lbl{display:block;font-weight:700;margin-bottom:.3rem}
+.bk-sub{margin:0;color:#555;font-size:.9rem}
+.bk-h3{margin:.2rem 0}
+.bk-bal{font-size:1.8rem;font-weight:800;color:var(--forest);margin:.2rem 0 .6rem}
+.bk-row{display:flex;justify-content:space-between;gap:1rem;padding:.4rem 0;border-bottom:1px solid #e3e3dc}
+.bk-row:last-child{border-bottom:0}
+.bk-neg{color:#a33;white-space:nowrap}.bk-pos{color:var(--forest);white-space:nowrap}
+.bk-err{background:#fde8e6;border-left:6px solid #c0392b;padding:.6rem .8rem;border-radius:8px;font-weight:700}
+.bk-warn{background:var(--sage);border-left:6px solid var(--saffron);padding:.6rem .8rem;border-radius:8px;font-size:.9rem}
+.bk-ok{background:#e4f2e4;border-left:6px solid var(--forest);padding:.6rem .8rem;border-radius:8px;font-weight:700}
+.bk-sms{background:#fff8dc;border:1px dashed #b8a24a;padding:.6rem .8rem;border-radius:8px;font-family:monospace;font-size:.85rem}
+.bk-tick{font-size:2.2rem;text-align:center}
+.bk input,.bk select{width:100%;box-sizing:border-box}
+.bk select{font:inherit;min-height:56px;padding:0 .8rem;border:var(--bd);border-radius:var(--r-sm);background:#fff}
+.bk-btns{display:flex;flex-wrap:wrap;gap:.6rem}.bk-btns button{flex:1;min-width:7rem}
+.ui button.bk-primary{background:var(--terra);color:#fff;border-color:var(--terra);font-weight:700}
+.ui button.bk-primary:hover{background:var(--terra-d)}
+#preview{width:100%;max-width:320px;border-radius:12px;border:var(--bd);margin-bottom:.8rem;background:#000;transform:scaleX(-1)}
+</style>
 <div class="ribbon">PRACTICE ROOM. Nothing here is real.</div>
 <h1>Practice</h1>
 <div class="tabs" role="tablist">
@@ -11,6 +35,7 @@
 <div class="room" id="room" hidden>
   <div class="device" aria-label="Practice device">
     <h2 id="room-title"></h2>
+    <video id="preview" autoplay muted playsinline hidden></video>
     <div id="ui" class="ui"></div>
     <p id="out" class="out" aria-live="polite"></p>
   </div>
@@ -18,7 +43,9 @@
     <h2>What to do now</h2>
     <p id="coach-text" class="coach-text"></p>
     <p class="muted" id="count"></p>
+    <button class="btn alt" id="listen">🔊 Suno</button>
     <button class="btn alt" id="stuck">I'm stuck</button>
+    <button class="btn alt" id="undo" hidden>↩ Undo</button>
     <p id="hint" class="hint" hidden></p>
     <button class="btn" id="again" hidden>Try again</button>
   </aside>

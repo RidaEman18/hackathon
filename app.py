@@ -44,6 +44,10 @@ app.config.update(
 )
 db.init_db()
 
+# Form Whisperer feature (own routes: /form-whisperer and /api/form-whisperer/*)
+from form_whisperer import bp as form_whisperer_bp  # noqa: E402
+app.register_blueprint(form_whisperer_bp)
+
 # Pehla admin account. Default sirf testing ke liye hai.
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@example.com").strip().lower()
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin123")

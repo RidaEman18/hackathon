@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Learn{% endblock %}
+{% block content %}
+<h1>Learn</h1>
+<p class="lead">Pick a lesson. Each one has four small steps.</p>
+<ul class="plain-list big">
+  {% for t in tutorials %}
+  <li><a href="/learn/{{ t.slug }}"><span>{{ t.icon }}</span> {{ t.title }}
+    {% if t.slug in p.tutorials %}<em class="tag">Done</em>{% endif %}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ t.title }}{% endblock %}
+{% block content %}
+<section class="player">
+  <p class="muted"><a href="/learn">Learn</a> / {{ t.title }}</p>
+  <div id="dots" class="dots" aria-hidden="true"></div>
+  <div class="step" id="step">
+    <div class="num" id="num">1</div>
+    <p class="steptext" id="text"></p>
+  </div>
+  <div class="row">
+    <button class="btn alt" id="read">🔊 Read aloud</button>
+  </div>
+  <div class="row nav-row">
+    <button class="btn alt" id="back">◀ Back</button>
+    <button class="btn" id="next">Next ▶</button>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>window.TUTORIAL = {{ t|tojson }};</script>
+<script src="{{ url_for('static', filename='js/tutorial.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div>
+    <h1 data-simple="Technology is easy. Go slowly.">Technology is easier one step at a time</h1>
+    <p class="lead" data-simple="Learn on your phone. Practice with no fear. Nothing here is real.">Short lessons, safe practice rooms where nothing is real, and a score that shows how confident you are becoming.</p>
+    <a class="btn big" href="/path">Get started</a>
+  </div>
+  <svg class="phone" viewBox="0 0 220 340" role="img" aria-label="A phone showing a practice room">
+    <rect x="10" y="10" width="200" height="320" rx="28" fill="#1F2A2E"/>
+    <rect x="24" y="40" width="172" height="268" rx="10" fill="#FAF4E8"/>
+    <rect x="24" y="40" width="172" height="34" fill="#E3A72F"/>
+    <text x="110" y="62" text-anchor="middle" font-size="12" font-weight="700" fill="#1F2A2E">PRACTICE ROOM</text>
+    <rect x="40" y="96" width="140" height="44" rx="8" fill="#DCE6D5" stroke="#1F2A2E" stroke-opacity=".3" stroke-width="2"/>
+    <text x="110" y="124" text-anchor="middle" font-size="13" fill="#1F2A2E">Check balance</text>
+    <rect x="40" y="156" width="140" height="44" rx="8" fill="#0F5C5A"/>
+    <text x="110" y="184" text-anchor="middle" font-size="13" fill="#FAF4E8">Send money</text>
+    <text x="110" y="240" text-anchor="middle" font-size="12" fill="#2F6B3F">You did not break anything.</text>
+    <circle cx="110" cy="276" r="9" fill="#B4482A"/>
+  </svg>
+</section>
+
+<section class="block">
+  <h2>What you can learn</h2>
+  <ul class="plain-list">
+    {% for t in tutorials %}<li><a href="/learn/{{ t.slug }}"><span>{{ t.icon }}</span> {{ t.title }}</a></li>{% endfor %}
+  </ul>
+</section>
+
+<section class="block sage">
+  <h2>How it works</h2>
+  <ol class="strip">
+    <li><strong>Learn.</strong> One small step on each screen.</li>
+    <li><strong>Practice.</strong> Click around in a room where nothing is real.</li>
+    <li><strong>Check.</strong> Take the scam quiz and watch your confidence score grow.</li>
+  </ol>
+</section>
+
+<section class="block two">
+  <div><h2>Why digital confidence matters</h2>
+  <p>Many of us avoid banking apps, video calls and forms because we fear breaking something or looking foolish. The problem is not intelligence. Technology is built for people who already speak its language.</p></div>
+  <div><h2>What makes qadam. different</h2>
+  <p>You click, not just watch. A coach helps on the exact step you are on. A confidence score shows progress. Simple words and read aloud work on every page.</p></div>
+</section>
+{% endblock %}

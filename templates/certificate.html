@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}My Certificate{% endblock %}
+{% block content %}
+<style>
+.cert-wrap{max-width:900px;margin:1.2rem auto}
+.cert{position:relative;background:#fffdf8;border:6px double var(--teal);outline:3px solid var(--terra);outline-offset:-16px;border-radius:6px;padding:2.6rem 2.2rem;text-align:center;box-shadow:var(--lift-lg)}
+.cert .brand{font-family:Fraunces,Georgia,serif;font-size:2rem;font-weight:700;color:var(--teal);margin:0}
+.cert .brand span{color:var(--terra)}
+.cert h1{font-size:2.3rem;margin:.4rem 0 .2rem}
+.cert .who{font-family:Fraunces,Georgia,serif;font-size:2.6rem;color:var(--terra);margin:.6rem 0;border-bottom:3px solid var(--saffron);display:inline-block;padding:0 1.5rem}
+.cert .level{font-size:1.5rem;font-weight:700;color:var(--teal);margin:.3rem 0}
+.cert-stats{display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem 2rem;margin:1.2rem 0}
+.cert-stats div{min-width:110px}.cert-stats b{display:block;font-family:Fraunces,Georgia,serif;font-size:1.9rem;color:var(--teal)}
+.cert-stats span{font-size:.85rem;color:var(--ink2)}
+.cert .seal{position:absolute;right:2.2rem;bottom:2.2rem;width:92px;height:92px;border-radius:50%;background:var(--saffron);border:4px solid var(--ink);display:grid;place-items:center;font-weight:800;font-size:.8rem;line-height:1.15;transform:rotate(-12deg)}
+.cert .meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-top:1.4rem;font-size:.85rem;color:var(--ink2);padding-right:110px}
+.cert .badges{justify-content:center}
+.cert-actions{display:flex;flex-wrap:wrap;gap:.7rem;justify-content:center;margin:1.2rem 0}
+@page{size:A4 landscape;margin:10mm}
+@media print{
+  header.top,.access,.foot,.no-print,.ribbon{display:none!important}
+  body{background:#fff}.cert{box-shadow:none;break-inside:avoid}.cert-wrap{margin:0;max-width:none}
+}
+@media(max-width:600px){.cert{padding:1.6rem 1rem}.cert .seal{position:static;margin:1rem auto;transform:none}.cert .meta{padding-right:0}}
+</style>
+
+{% if not unlocked %}
+<div class="cert-wrap no-print">
+  <h1>Your certificate is waiting</h1>
+  <p class="lead">Finish your first lesson or practice room and your certificate unlocks here.</p>
+  <p><a class="btn" href="/learn">Start a lesson</a></p>
+</div>
+{% else %}
+<div class="cert-wrap">
+  <article class="cert" aria-label="Digital Confidence Certificate">
+    <p class="brand">qadam<span>.</span></p>
+    <h1>Certificate of Digital Confidence</h1>
+    <p>This proudly certifies that</p>
+    <p class="who">{{ who }}</p>
+    <p>has taken confident steps toward using technology safely, reaching the level of</p>
+    <p class="level">{{ p.level }} &middot; {{ p.score }}/100</p>
+    <div class="cert-stats">
+      <div><b>{{ p.tutorials|length }}/{{ total }}</b><span>Lessons done</span></div>
+      <div><b>{{ [p.practice|length, 3]|min }}/3</b><span>Practice rooms</span></div>
+      <div><b>{{ p.quiz }}%</b><span>Safety quiz</span></div>
+      <div><b>{{ p.dojo }}</b><span>Scam Dojo checks</span></div>
+    </div>
+    {% if badges %}<ul class="badges">{% for b in badges %}<li>{{ b }}</li>{% endfor %}</ul>{% endif %}
+    <p class="muted"><em>Mubarak ho! Aap ne ek aur qadam aage barha diya.</em></p>
+    <div class="meta"><span>Date: {{ today }}</span><span>Certificate no: {{ cert_no }}</span><span>Take it one step at a time.</span></div>
+    <div class="seal" aria-hidden="true">qadam.<br>★<br>Verified<br>learner</div>
+  </article>
+  <div class="cert-actions no-print">
+    <button class="btn" type="button" onclick="window.print()">🖨️ Print or save as PDF</button>
+    <a class="btn alt" href="/path">Back to dashboard</a>
+  </div>
+  <p class="muted no-print" style="text-align:center">Tip: in the print window, choose &quot;Save as PDF&quot; as the printer.</p>
+</div>
+{% endif %}
+{% endblock %}
